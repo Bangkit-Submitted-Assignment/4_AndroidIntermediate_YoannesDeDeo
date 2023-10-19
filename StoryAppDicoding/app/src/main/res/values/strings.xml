@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">StoryApps</string>
+    <string name="login">LOGIN</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
+    <string name="title_login_page">Ingin membagikan moment? Buatlah story anda</string>
+    <string name="message_login_page">Masukkan datamu dulu untuk login</string>
+    <string name="signup">Daftar</string>
+    <string name="name">Nama</string>
+    <string name="title_signup_page">Lengkapi data dirimu di bawah ini ya</string>
+    <string name="title_welcome_page">Selamat datang di Story Apps</string>
+    <string name="message_welcome_page">Mau Membagikan moment, pengalaman, atau pun kenangan bersama keluarga, mantan, ataupun pacar? Skuy masuk ke Story Apps, jika belum memiliki akun maka bisa register dulu yak  </string>
+</resources>
