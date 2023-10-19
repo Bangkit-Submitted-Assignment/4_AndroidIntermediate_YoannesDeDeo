@@ -25,10 +25,10 @@ class PwEditText : AppCompatEditText {
                 // Do nothing.
             }
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if(s.length<8){
-                    error="Password minimal berisi 8 character"
-                }else{
-                    error=null
+                if (s.toString().length < 8) {
+                    setError("Password tidak boleh kurang dari 8 karakter", null)
+                } else {
+                    error = null
                 }
             }
             override fun afterTextChanged(s: Editable) {
