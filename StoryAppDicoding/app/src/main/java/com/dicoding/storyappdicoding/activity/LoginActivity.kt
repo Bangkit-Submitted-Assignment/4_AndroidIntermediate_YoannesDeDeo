@@ -9,8 +9,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-//        val btnSubmit= findViewById<Button>(R.id.loginButton)
     }
-
 
 }
