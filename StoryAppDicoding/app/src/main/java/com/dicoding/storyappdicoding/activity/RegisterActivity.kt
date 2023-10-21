@@ -11,7 +11,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.dicoding.storyappdicoding.api.ApiService
 import com.dicoding.storyappdicoding.databinding.ActivityRegisterBinding
 import com.dicoding.storyappdicoding.di.Injection
 import com.dicoding.storyappdicoding.view_model.RegisterViewModel
@@ -20,7 +19,6 @@ import kotlinx.coroutines.launch
 
 
 class RegisterActivity : AppCompatActivity() {
-    private lateinit var apiService: ApiService
 
     private lateinit var registerViewModel: RegisterViewModel
     private lateinit var binding: ActivityRegisterBinding

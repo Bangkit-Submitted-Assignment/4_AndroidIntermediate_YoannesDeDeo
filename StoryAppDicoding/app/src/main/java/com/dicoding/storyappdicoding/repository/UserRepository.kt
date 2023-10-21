@@ -1,6 +1,7 @@
 package com.dicoding.storyappdicoding.repository
 
 import com.dicoding.storyappdicoding.api.ApiService
+import com.dicoding.storyappdicoding.api.LoginResponse
 import com.dicoding.storyappdicoding.api.RegisterResponse
 import com.dicoding.storyappdicoding.data_class.DataUser
 import com.dicoding.storyappdicoding.data_class.UserPreference
@@ -25,6 +26,10 @@ class UserRepository private constructor(
 
     suspend fun register(name:String, email:String, password:String,): RegisterResponse {
         return apiService.register(name, email, password)
+    }
+
+    suspend fun login (email:String, password:String): LoginResponse {
+        return apiService.login(email,password)
     }
 
     companion object {

@@ -2,23 +2,38 @@ package com.dicoding.storyappdicoding.activity
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.dicoding.storyappdicoding.databinding.ActivityLoginBinding
+import com.dicoding.storyappdicoding.di.Injection
+import com.dicoding.storyappdicoding.view_model.LoginViewModel
+import com.dicoding.storyappdicoding.view_model_factory.ViewModelFactory
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding:ActivityLoginBinding
+    private lateinit var loginViewModel: LoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        loginViewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(Injection.provideRepository(this))
+        ).get(LoginViewModel::class.java)
+
         playAnimation()
         setupView()
+        login()
 
     }
 
@@ -35,24 +50,51 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.hide()
     }
 
-//    private fun setupAction() {
-//        binding.loginButton.setOnClickListener {
-//            val email = binding.edLoginEmail.text.toString()
-//            viewModel.saveSession(UserModel(email, "sample_token"))
-//            AlertDialog.Builder(this).apply {
-//                setTitle("Yeah!")
-//                setMessage("Anda berhasil login. Sudah tidak sabar untuk belajar ya?")
-//                setPositiveButton("Lanjut") { _, _ ->
-//                    val intent = Intent(context, MainActivity::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-//                    startActivity(intent)
-//                    finish()
-//                }
-//                create()
-//                show()
-//            }
-//        }
-//    }
+    private fun login() {
+        binding.loginButton.setOnClickListener {
+            val email = binding.edLoginEmail.text.toString()
+            val pw = binding.edLoginPassword.text.toString()
+
+            lifecycleScope.launch {
+                loginViewModel.login(email, pw)
+                try {
+                    val message = loginViewModel.successMessage
+                    if (message != null) {
+                        AlertDialog.Builder(this@LoginActivity).apply {
+                            setTitle("Yeah!")
+                            setMessage("validasi akun berhasil, anda akan ke halaman utama")
+                            setPositiveButton("Lanjut") { _, _ ->
+                                val intent= Intent(this@LoginActivity, MainActivity::class.java)
+                                startActivity(intent)
+                            }
+                            create()
+                            show()
+                        }
+
+                    }
+                    else {
+                        AlertDialog.Builder(this@LoginActivity).apply {
+                            setTitle("Gagal!")
+                            setMessage("Pastikan email, nama, dan password valid atau akun belum terdaftar")
+                            setPositiveButton("OK") { _, _ ->
+                            }
+                            create()
+                            show()
+                        }
+                    }
+                } catch (e: Exception) {
+                    AlertDialog.Builder(this@LoginActivity).apply {
+                        setTitle("Gagal!")
+                        setMessage("Pendaftaran gagal. Pastikan email, nama, dan password valid atau cek koneksi anda")
+                        setPositiveButton("OK") { _, _ ->
+                        }
+                        create()
+                        show()
+                    }
+                }
+            }
+        }
+    }
 
     private fun playAnimation() {
         ObjectAnimator.ofFloat(binding.imageView, View.TRANSLATION_X, -30f, 30f).apply {
