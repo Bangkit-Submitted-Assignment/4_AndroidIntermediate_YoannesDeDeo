@@ -12,4 +12,5 @@
     <string name="message_welcome_page">Mau Membagikan moment, pengalaman, atau pun kenangan bersama keluarga, mantan, ataupun pacar? Skuy masuk ke Story Apps, jika belum memiliki akun maka bisa register dulu yak  </string>
     <string name="name_item">judul</string>
     <string name="desc_item">deskripsi item</string>
+    <string name="logout">Logout</string>
 </resources>
