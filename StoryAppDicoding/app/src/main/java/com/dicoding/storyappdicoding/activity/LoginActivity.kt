@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.dicoding.storyappdicoding.data_class.DataUser
 import com.dicoding.storyappdicoding.databinding.ActivityLoginBinding
 import com.dicoding.storyappdicoding.di.Injection
 import com.dicoding.storyappdicoding.view_model.LoginViewModel
@@ -60,6 +61,8 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     val message = loginViewModel.successMessage
                     if (message != null) {
+                        val user = DataUser(email, "token", isLogin = true)
+
                         AlertDialog.Builder(this@LoginActivity).apply {
                             setTitle("Yeah!")
                             setMessage("validasi akun berhasil, anda akan ke halaman utama")
@@ -67,6 +70,7 @@ class LoginActivity : AppCompatActivity() {
                                 val intent= Intent(this@LoginActivity, MainActivity::class.java)
                                 startActivity(intent)
                             }
+                            loginViewModel.saveSession(user)
                             create()
                             show()
                         }

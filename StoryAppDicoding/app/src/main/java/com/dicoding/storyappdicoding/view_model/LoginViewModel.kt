@@ -15,6 +15,7 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
     var successMessage: String? =null
     fun saveSession(user: DataUser) {
         viewModelScope.launch {
+            user.isLogin=true
             repository.saveSession(user)
         }
     }
@@ -36,5 +37,5 @@ class LoginViewModel(private val repository: UserRepository) : ViewModel() {
             val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
             val errorMessage = errorBody.message
         }
-    }
+}
 }

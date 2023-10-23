@@ -56,6 +56,17 @@ class RegisterActivity : AppCompatActivity() {
             val name = binding.edRegisterName.text.toString()
             val pw = binding.edRegisterPassword.text.toString()
 
+            if (pw.length < 8) {
+                AlertDialog.Builder(this@RegisterActivity).apply {
+                    setTitle("Gagal!")
+                    setMessage("Password harus berjumlah minimal 8 karakter.")
+                    setPositiveButton("OK") { _, _ -> }
+                    create()
+                    show()
+                    return@setOnClickListener
+                }
+            }
+
             lifecycleScope.launch {
                 registerViewModel.registerUser(name, email, pw)
                 try {
