@@ -10,4 +10,6 @@
     <string name="title_signup_page">Lengkapi data dirimu di bawah ini ya</string>
     <string name="title_welcome_page">Selamat datang di Story Apps</string>
     <string name="message_welcome_page">Mau Membagikan moment, pengalaman, atau pun kenangan bersama keluarga, mantan, ataupun pacar? Skuy masuk ke Story Apps, jika belum memiliki akun maka bisa register dulu yak  </string>
+    <string name="name_item">judul</string>
+    <string name="desc_item">deskripsi item</string>
 </resources>
