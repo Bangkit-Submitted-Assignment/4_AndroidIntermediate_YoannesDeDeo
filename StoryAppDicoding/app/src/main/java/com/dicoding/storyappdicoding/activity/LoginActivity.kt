@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -32,10 +34,27 @@ class LoginActivity : AppCompatActivity() {
             ViewModelFactory(Injection.provideRepository(this))
         ).get(LoginViewModel::class.java)
 
+        val myEdiText= binding.edLoginPassword
+        myEdiText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                setMyButtonEnable()
+            }
+            override fun afterTextChanged(s: Editable) {
+            }
+        })
+
         playAnimation()
         setupView()
         login()
 
+    }
+
+    private fun setMyButtonEnable() {
+        val result = binding.edLoginPassword.text.toString()
+        val myButton = binding.loginButton
+        myButton.isEnabled = result.isNotEmpty() && result.length >= 8
     }
 
     private fun setupView() {
@@ -133,6 +152,5 @@ class LoginActivity : AppCompatActivity() {
             startDelay = 150
         }.start()
     }
-
 
 }

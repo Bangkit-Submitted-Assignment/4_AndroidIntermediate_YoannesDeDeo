@@ -24,4 +24,13 @@
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="185dp"
         tools:layout_editor_absoluteY="352dp" />
+
+    <TextView
+        android:id="@+id/tes2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="null"
+        tools:layout_editor_absoluteX="207dp"
+        tools:layout_editor_absoluteY="421dp"
+        tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>

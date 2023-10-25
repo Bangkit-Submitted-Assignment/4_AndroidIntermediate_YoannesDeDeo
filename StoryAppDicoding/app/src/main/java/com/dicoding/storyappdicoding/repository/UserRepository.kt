@@ -3,6 +3,7 @@ package com.dicoding.storyappdicoding.repository
 import com.dicoding.storyappdicoding.api.ApiService
 import com.dicoding.storyappdicoding.api.LoginResponse
 import com.dicoding.storyappdicoding.api.RegisterResponse
+import com.dicoding.storyappdicoding.api.StoryResponse
 import com.dicoding.storyappdicoding.data_class.DataUser
 import com.dicoding.storyappdicoding.data_class.UserPreference
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +19,10 @@ class UserRepository private constructor(
 
     fun getSession(): Flow<DataUser> {
         return userPreference.getSession()
+    }
+
+    suspend fun getStory(): StoryResponse {
+        return apiService.getStories()
     }
 
     suspend fun logout() {

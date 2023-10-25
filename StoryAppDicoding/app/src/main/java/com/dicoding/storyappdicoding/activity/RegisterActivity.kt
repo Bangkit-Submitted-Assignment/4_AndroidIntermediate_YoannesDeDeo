@@ -4,6 +4,8 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -32,9 +34,22 @@ class RegisterActivity : AppCompatActivity() {
             ViewModelFactory(Injection.provideRepository(this))
         ).get(RegisterViewModel::class.java)
 
+        val myEdiText= binding.edRegisterPassword
+        myEdiText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                setMyButtonEnable()
+            }
+            override fun afterTextChanged(s: Editable) {
+            }
+        })
+
         setupView()
         playAnimation()
+        setMyButtonEnable()
         register()
+
     }
 
     private fun setupView() {
@@ -55,17 +70,6 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.edRegisterEmail.text.toString()
             val name = binding.edRegisterName.text.toString()
             val pw = binding.edRegisterPassword.text.toString()
-
-            if (pw.length < 8) {
-                AlertDialog.Builder(this@RegisterActivity).apply {
-                    setTitle("Gagal!")
-                    setMessage("Password harus berjumlah minimal 8 karakter.")
-                    setPositiveButton("OK") { _, _ -> }
-                    create()
-                    show()
-                    return@setOnClickListener
-                }
-            }
 
             lifecycleScope.launch {
                 registerViewModel.registerUser(name, email, pw)
@@ -105,6 +109,12 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun setMyButtonEnable() {
+        val result = binding.edRegisterPassword.text.toString()
+        val myButton = binding.signupBtn
+        myButton.isEnabled = result.isNotEmpty() && result.length >= 8
     }
 
 

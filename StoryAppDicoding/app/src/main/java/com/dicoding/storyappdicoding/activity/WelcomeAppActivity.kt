@@ -2,17 +2,20 @@ package com.dicoding.storyappdicoding.activity
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.storyappdicoding.databinding.ActivityWelcomeAppBinding
 
 class WelcomeAppActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeAppBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +25,6 @@ class WelcomeAppActivity : AppCompatActivity() {
         setupView()
         clickAction()
         playAnimation()
-
 
     }
 
@@ -69,6 +71,20 @@ class WelcomeAppActivity : AppCompatActivity() {
         binding.signupButton.setOnClickListener {
             val goRegisActivity=Intent(this@WelcomeAppActivity,RegisterActivity::class.java)
             startActivity(goRegisActivity)
+        }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        AlertDialog.Builder(this).apply {
+            setTitle("Keluar")
+            setMessage("Anda yakin ingin keluar dari aplikasi?")
+            setPositiveButton("Ya") { _, _ ->
+                finishAffinity()
+            }
+            setNegativeButton("Tidak", null)
+            create()
+            show()
         }
     }
 }

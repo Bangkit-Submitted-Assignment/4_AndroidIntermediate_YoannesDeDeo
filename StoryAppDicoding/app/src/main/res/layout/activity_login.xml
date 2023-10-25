@@ -126,7 +126,7 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.dicoding.storyappdicoding.custom_view.ButtonCustom
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="64dp"

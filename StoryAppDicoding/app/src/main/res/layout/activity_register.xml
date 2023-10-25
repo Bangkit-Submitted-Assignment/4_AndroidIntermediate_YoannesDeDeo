@@ -142,7 +142,7 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <com.dicoding.storyappdicoding.custom_view.ButtonCustom
         android:id="@+id/signupBtn"
         android:layout_width="0dp"
         android:layout_height="64dp"
@@ -155,7 +155,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditTextLayout"
         android:alpha="0"
-        tools:alpha="100"/>
+        tools:alpha="100"
+        android:textColor="@color/white"/>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineHorizontal"
