@@ -5,14 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyappdicoding.R
 import com.dicoding.storyappdicoding.adapter.MainAdapter
 import com.dicoding.storyappdicoding.api.ListStoryItem
 import com.dicoding.storyappdicoding.databinding.ActivityMainBinding
+import com.dicoding.storyappdicoding.di.Helper
 import com.dicoding.storyappdicoding.di.Injection
 import com.dicoding.storyappdicoding.view_model.MainViewModel
 import com.dicoding.storyappdicoding.view_model_factory.ViewModelFactory
@@ -33,17 +35,28 @@ class MainActivity : AppCompatActivity() {
         ).get(MainViewModel::class.java)
 
         cekSession()
-        getSession()
 
-        mainViewModel.getStory()
-        mainViewModel.getStoryResponse().observe(this) { storyData ->
-            storyData?.let {
-                setStory(storyData)
+        val layoutManager = LinearLayoutManager(this)
+        binding.listRecycleMain.layoutManager = layoutManager
+        val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+        binding.listRecycleMain.addItemDecoration(itemDecoration)
+
+        val tokenFlow = mainViewModel.getSession()
+        tokenFlow.observe(this) { user ->
+            val token = user.token
+            mainViewModel.getStory(token)
+            mainViewModel.getStoryLiveData.observe(this) { stories ->
+                if (stories!=null){
+                    when(stories){
+                        is Helper.Success -> setStory(stories.data.listStory)
+                    }
+
+                }
             }
         }
     }
 
-    private fun setStory(data: List<ListStoryItem?>) {
+    private fun setStory(data: List<ListStoryItem>) {
         val adapter = MainAdapter(this)
         adapter.submitList(data)
         binding.listRecycleMain.adapter = adapter
@@ -62,13 +75,6 @@ class MainActivity : AppCompatActivity() {
                     show()
                 }
             }
-        }
-    }
-
-    private fun getSession() {
-        mainViewModel.getSession().observe(this) { user ->
-            val tes = findViewById<TextView>(R.id.tes2)
-            tes.text = user.email
         }
     }
 

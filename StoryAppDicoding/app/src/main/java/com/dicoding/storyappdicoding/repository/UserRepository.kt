@@ -1,11 +1,13 @@
 package com.dicoding.storyappdicoding.repository
 
+import android.util.Log
+import androidx.lifecycle.liveData
 import com.dicoding.storyappdicoding.api.ApiService
 import com.dicoding.storyappdicoding.api.LoginResponse
 import com.dicoding.storyappdicoding.api.RegisterResponse
-import com.dicoding.storyappdicoding.api.StoryResponse
 import com.dicoding.storyappdicoding.data_class.DataUser
 import com.dicoding.storyappdicoding.data_class.UserPreference
+import com.dicoding.storyappdicoding.di.Helper
 import kotlinx.coroutines.flow.Flow
 
 class UserRepository private constructor(
@@ -21,8 +23,13 @@ class UserRepository private constructor(
         return userPreference.getSession()
     }
 
-    suspend fun getStory(): StoryResponse {
-        return apiService.getStories()
+    suspend fun getStory(token: String)= liveData{
+        try {
+            val response= apiService.getStories("Bearer $token")
+            emit(Helper.Success(response))
+        }catch (e:Exception){
+            Log.d("User repository", "Permintaan memuat data gagal", e)
+        }
     }
 
     suspend fun logout() {

@@ -24,6 +24,8 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding:ActivityLoginBinding
     private lateinit var loginViewModel: LoginViewModel
+
+    private lateinit var user:DataUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -80,8 +82,9 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     val message = loginViewModel.successMessage
                     if (message != null) {
-                        val user = DataUser(email, "token", isLogin = true)
 
+//                        user = DataUser(email, loginViewModel.getAuthToken(), isLogin = true)
+//                        user = DataUser(email, "token", isLogin = true)
                         AlertDialog.Builder(this@LoginActivity).apply {
                             setTitle("Yeah!")
                             setMessage("validasi akun berhasil, anda akan ke halaman utama")
@@ -89,7 +92,6 @@ class LoginActivity : AppCompatActivity() {
                                 val intent= Intent(this@LoginActivity, MainActivity::class.java)
                                 startActivity(intent)
                             }
-                            loginViewModel.saveSession(user)
                             create()
                             show()
                         }
