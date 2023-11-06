@@ -65,11 +65,11 @@ class WelcomeAppActivity : AppCompatActivity() {
 
     private fun clickAction() {
         binding.loginButton.setOnClickListener {
-            val goLoginActivity=Intent(this@WelcomeAppActivity,LoginActivity::class.java)
+            val goLoginActivity = Intent(this@WelcomeAppActivity, LoginActivity::class.java)
             startActivity(goLoginActivity)
         }
         binding.signupButton.setOnClickListener {
-            val goRegisActivity=Intent(this@WelcomeAppActivity,RegisterActivity::class.java)
+            val goRegisActivity = Intent(this@WelcomeAppActivity, RegisterActivity::class.java)
             startActivity(goRegisActivity)
         }
     }

@@ -6,7 +6,9 @@ import android.text.TextWatcher
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 
-class PwEditText : AppCompatEditText {
+
+class Emailcustom : AppCompatEditText {
+
     constructor(context: Context) : super(context) {
         init()
     }
@@ -29,8 +31,9 @@ class PwEditText : AppCompatEditText {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length < 8) {
-                    setError("Password tidak boleh kurang dari 8 karakter", null)
+                val emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
+                if (!s.toString().matches(emailPattern.toRegex())) {
+                    error = "Pastikan gunakan format email yang benar"
                 } else {
                     error = null
                 }
@@ -38,6 +41,5 @@ class PwEditText : AppCompatEditText {
 
             override fun afterTextChanged(s: Editable) {}
         })
-
     }
 }

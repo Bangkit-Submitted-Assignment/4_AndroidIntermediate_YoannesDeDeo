@@ -10,10 +10,11 @@ import com.dicoding.storyappdicoding.data_class.UserPreference
 import com.dicoding.storyappdicoding.di.Helper
 import kotlinx.coroutines.flow.Flow
 
+
 class UserRepository private constructor(
     private val userPreference: UserPreference,
-    private val apiService: ApiService)
-{
+    private val apiService: ApiService
+) {
 
     suspend fun saveSession(user: DataUser) {
         userPreference.saveSession(user)
@@ -23,12 +24,22 @@ class UserRepository private constructor(
         return userPreference.getSession()
     }
 
-    suspend fun getStory(token: String)= liveData{
+    suspend fun getStory(token: String) = liveData {
         try {
-            val response= apiService.getStories("Bearer $token")
+            val response = apiService.getStories("Bearer $token")
             emit(Helper.Success(response))
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Log.d("User repository", "Permintaan memuat data gagal", e)
+        }
+    }
+
+    suspend fun getDetailUser(token: String, id: String) = liveData {
+        try {
+            val response = apiService.getDetail("Bearer $token", id)
+            emit(Helper.Success(response))
+        } catch (e: Exception) {
+            Log.d("User repository", "Permintaan memuat data gagal", e)
+            Log.d("User repository", "$token dan $id masih eror")
         }
     }
 
@@ -36,19 +47,20 @@ class UserRepository private constructor(
         userPreference.logout()
     }
 
-    suspend fun register(name:String, email:String, password:String,): RegisterResponse {
+
+    suspend fun register(name: String, email: String, password: String): RegisterResponse {
         return apiService.register(name, email, password)
     }
 
-    suspend fun login (email:String, password:String): LoginResponse {
-        return apiService.login(email,password)
+    suspend fun login(email: String, password: String): LoginResponse {
+        return apiService.login(email, password)
     }
 
     companion object {
         @Volatile
         private var instance: UserRepository? = null
         fun getInstance(
-            userPreference: UserPreference,apiService: ApiService
+            userPreference: UserPreference, apiService: ApiService
         ): UserRepository =
             instance ?: synchronized(this) {
                 instance ?: UserRepository(userPreference, apiService)

@@ -22,10 +22,10 @@ import com.dicoding.storyappdicoding.view_model_factory.ViewModelFactory
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var binding:ActivityLoginBinding
+    private lateinit var binding: ActivityLoginBinding
     private lateinit var loginViewModel: LoginViewModel
 
-    private lateinit var user:DataUser
+    private lateinit var user: DataUser
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -36,13 +36,15 @@ class LoginActivity : AppCompatActivity() {
             ViewModelFactory(Injection.provideRepository(this))
         ).get(LoginViewModel::class.java)
 
-        val myEdiText= binding.edLoginPassword
+        val myEdiText = binding.edLoginPassword
         myEdiText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
+
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 setMyButtonEnable()
             }
+
             override fun afterTextChanged(s: Editable) {
             }
         })
@@ -50,7 +52,6 @@ class LoginActivity : AppCompatActivity() {
         playAnimation()
         setupView()
         login()
-
     }
 
     private fun setMyButtonEnable() {
@@ -77,27 +78,27 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.edLoginEmail.text.toString()
             val pw = binding.edLoginPassword.text.toString()
 
+            showLoading(true)
+
             lifecycleScope.launch {
                 loginViewModel.login(email, pw)
                 try {
                     val message = loginViewModel.successMessage
                     if (message != null) {
-
-//                        user = DataUser(email, loginViewModel.getAuthToken(), isLogin = true)
-//                        user = DataUser(email, "token", isLogin = true)
+                        showLoading(false)
                         AlertDialog.Builder(this@LoginActivity).apply {
                             setTitle("Yeah!")
                             setMessage("validasi akun berhasil, anda akan ke halaman utama")
                             setPositiveButton("Lanjut") { _, _ ->
-                                val intent= Intent(this@LoginActivity, MainActivity::class.java)
+                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                 startActivity(intent)
                             }
                             create()
                             show()
                         }
 
-                    }
-                    else {
+                    } else {
+                        showLoading(false)
                         AlertDialog.Builder(this@LoginActivity).apply {
                             setTitle("Gagal!")
                             setMessage("Pastikan email, nama, dan password valid atau akun belum terdaftar")
@@ -108,6 +109,7 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
                 } catch (e: Exception) {
+                    showLoading(false)
                     AlertDialog.Builder(this@LoginActivity).apply {
                         setTitle("Gagal!")
                         setMessage("Pendaftaran gagal. Pastikan email, nama, dan password valid atau cek koneksi anda")
@@ -153,6 +155,10 @@ class LoginActivity : AppCompatActivity() {
             )
             startDelay = 150
         }.start()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
 }

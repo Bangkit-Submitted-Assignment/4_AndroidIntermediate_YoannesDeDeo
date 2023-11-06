@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -98,7 +99,7 @@
         android:alpha="0"
         tools:alpha="100">
 
-        <com.google.android.material.textfield.TextInputEditText
+        <com.dicoding.storyappdicoding.custom_view.Emailcustom
             android:id="@+id/ed_register_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -173,5 +174,16 @@
         android:layout_height="64dp"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.1" />
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

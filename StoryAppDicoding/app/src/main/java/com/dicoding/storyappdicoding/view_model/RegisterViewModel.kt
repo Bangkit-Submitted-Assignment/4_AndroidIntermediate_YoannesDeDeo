@@ -7,9 +7,9 @@ import com.dicoding.storyappdicoding.repository.UserRepository
 import com.google.gson.Gson
 import retrofit2.HttpException
 
-class RegisterViewModel(private val repository: UserRepository) : ViewModel(){
+class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
 
-    var successMessage: String? =null
+    var successMessage: String? = null
 
     suspend fun registerUser(name: String, email: String, password: String) {
         try {
@@ -22,11 +22,15 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel(){
             successMessage = response.message
 
         } catch (e: HttpException) {
-            Log.e("RegisterViewModel", "Kesalahan saat melakukan permintaan pendaftaran: ${e.message()}")
+            Log.e(
+                "RegisterViewModel",
+                "Kesalahan saat melakukan permintaan pendaftaran: ${e.message()}"
+            )
 
             val jsonInString = e.response()?.errorBody()?.string()
             val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
             val errorMessage = errorBody.message
         }
     }
+
 }

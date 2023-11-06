@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.dicoding.storyappdicoding.api.DetailResponse
 import com.dicoding.storyappdicoding.api.StoryResponse
 import com.dicoding.storyappdicoding.data_class.DataUser
 import com.dicoding.storyappdicoding.di.Helper
@@ -20,14 +21,25 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
     }
 
     private val storyLiveData = MutableLiveData<Helper<StoryResponse>>()
-    val getStoryLiveData : LiveData<Helper<StoryResponse>> = storyLiveData
-fun getStory(token: String) {
-    viewModelScope.launch {
-        repository.getStory(token).asFlow().collect{
-            storyLiveData.value=it
+    val getStoryLiveData: LiveData<Helper<StoryResponse>> = storyLiveData
+
+    private val storyDetailData = MutableLiveData<Helper<DetailResponse>>()
+    val getStoryDetailData: LiveData<Helper<DetailResponse>> = storyDetailData
+    fun getStory(token: String) {
+        viewModelScope.launch {
+            repository.getStory(token).asFlow().collect {
+                storyLiveData.value = it
+            }
         }
     }
-}
+
+    fun getDetail(token: String, id: String) {
+        viewModelScope.launch {
+            repository.getDetailUser(token, id).asFlow().collect {
+                storyDetailData.value = it
+            }
+        }
+    }
 
     fun logout() {
         viewModelScope.launch {

@@ -2,6 +2,7 @@ package com.dicoding.storyappdicoding.activity
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.dicoding.storyappdicoding.R
 import com.dicoding.storyappdicoding.databinding.ActivityRegisterBinding
 import com.dicoding.storyappdicoding.di.Injection
 import com.dicoding.storyappdicoding.view_model.RegisterViewModel
@@ -29,18 +31,21 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.title = getString(R.string.regis_page)
         registerViewModel = ViewModelProvider(
             this,
             ViewModelFactory(Injection.provideRepository(this))
         ).get(RegisterViewModel::class.java)
 
-        val myEdiText= binding.edRegisterPassword
+        val myEdiText = binding.edRegisterPassword
         myEdiText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
             }
+
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 setMyButtonEnable()
             }
+
             override fun afterTextChanged(s: Editable) {
             }
         })
@@ -70,24 +75,28 @@ class RegisterActivity : AppCompatActivity() {
             val email = binding.edRegisterEmail.text.toString()
             val name = binding.edRegisterName.text.toString()
             val pw = binding.edRegisterPassword.text.toString()
+            showLoading(true)
 
             lifecycleScope.launch {
                 registerViewModel.registerUser(name, email, pw)
                 try {
+                    showLoading(false)
                     val message = registerViewModel.successMessage
                     if (message != null) {
                         AlertDialog.Builder(this@RegisterActivity).apply {
                             setTitle("Yeah!")
                             setMessage("Akun dengan $email berhasil dibuat. Yuk, login.")
                             setPositiveButton("Lanjut") { _, _ ->
-                                finish()
+                                val intent =
+                                    Intent(this@RegisterActivity, LoginActivity::class.java)
+                                startActivity(intent)
                             }
                             create()
                             show()
                         }
 
-                    }
-                    else {
+                    } else {
+                        showLoading(false)
                         AlertDialog.Builder(this@RegisterActivity).apply {
                             setTitle("Gagal!")
                             setMessage("Pendaftaran gagal. Pastikan email, nama, dan password valid atau akun sudah terdaftar")
@@ -97,6 +106,7 @@ class RegisterActivity : AppCompatActivity() {
                             show()
                         }
                     }
+                    showLoading(false)
                 } catch (e: Exception) {
                     AlertDialog.Builder(this@RegisterActivity).apply {
                         setTitle("Gagal!")
@@ -109,6 +119,10 @@ class RegisterActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     private fun setMyButtonEnable() {
@@ -155,4 +169,5 @@ class RegisterActivity : AppCompatActivity() {
             startDelay = 150
         }.start()
     }
+
 }

@@ -14,6 +14,7 @@ import com.dicoding.storyappdicoding.R
 import com.dicoding.storyappdicoding.adapter.MainAdapter
 import com.dicoding.storyappdicoding.api.ListStoryItem
 import com.dicoding.storyappdicoding.databinding.ActivityMainBinding
+import com.dicoding.storyappdicoding.databinding.ListItemBinding
 import com.dicoding.storyappdicoding.di.Helper
 import com.dicoding.storyappdicoding.di.Injection
 import com.dicoding.storyappdicoding.view_model.MainViewModel
@@ -23,11 +24,14 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
+    private lateinit var itemBinding: ListItemBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        supportActionBar?.title = getString(R.string.beranda)
 
         mainViewModel = ViewModelProvider(
             this,
@@ -46,14 +50,24 @@ class MainActivity : AppCompatActivity() {
             val token = user.token
             mainViewModel.getStory(token)
             mainViewModel.getStoryLiveData.observe(this) { stories ->
-                if (stories!=null){
-                    when(stories){
+                if (stories != null) {
+                    when (stories) {
                         is Helper.Success -> setStory(stories.data.listStory)
+                        is Helper.Error -> showError("Failed to load data: ${stories.eror.message}")
                     }
 
+                }else{
+                    itemBinding.itemDescription.text=getString(R.string.kosong)
+                    itemBinding.itemName.text=getString(R.string.kosong)
                 }
             }
         }
+
+        binding.uploadButton.setOnClickListener{
+            val intent= Intent(this@MainActivity,UploadActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     private fun setStory(data: List<ListStoryItem>) {
@@ -61,6 +75,22 @@ class MainActivity : AppCompatActivity() {
         adapter.submitList(data)
         binding.listRecycleMain.adapter = adapter
     }
+
+    private fun showError(message: String) {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Error")
+            .setMessage("Failed to load data: $message")
+            .setPositiveButton("Retry") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        dialog.show()
+    }
+
     private fun cekSession() {
         mainViewModel.getSession().observe(this) { user ->
             if (!user.isLogin) {
@@ -91,6 +121,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(goLogout)
                 return true
             }
+
             else -> return super.onOptionsItemSelected(item)
         }
     }

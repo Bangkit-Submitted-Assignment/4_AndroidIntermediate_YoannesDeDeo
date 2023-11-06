@@ -1,18 +1,21 @@
 package com.dicoding.storyappdicoding.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.dicoding.storyappdicoding.activity.DetailActivity
 import com.dicoding.storyappdicoding.activity.MainActivity
 import com.dicoding.storyappdicoding.api.ListStoryItem
 import com.dicoding.storyappdicoding.databinding.ListItemBinding
 
-class MainAdapter(mainActivity: MainActivity) : ListAdapter<ListStoryItem, MainAdapter.MyViewHolder>(
-    DIFF_CALLBACK
-) {
+class MainAdapter(mainActivity: MainActivity) :
+    ListAdapter<ListStoryItem, MainAdapter.MyViewHolder>(
+        DIFF_CALLBACK
+    ) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,12 +25,12 @@ class MainAdapter(mainActivity: MainActivity) : ListAdapter<ListStoryItem, MainA
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val user = getItem(position)
         holder.bind(user)
-
-//        holder.itemView.setOnClickListener {
-//            val intent = Intent(holder.itemView.context, DetailUserActivity::class.java)
-//            intent.putExtra(DetailUserActivity.LOGIN, user.login)
-//            holder.itemView.context.startActivity(intent)
-//        }
+        holder.itemView.setOnClickListener{
+            val sendData= Intent(holder.itemView.context,DetailActivity::class.java)
+            sendData.putExtra(DetailActivity.USER,user.id)
+            sendData.putExtra(DetailActivity.NAME,user.name)
+            holder.itemView.context.startActivity(sendData)
+        }
     }
 
     class MyViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -37,7 +40,7 @@ class MainAdapter(mainActivity: MainActivity) : ListAdapter<ListStoryItem, MainA
                 .load(img)
                 .into(binding.itemPhoto)
             binding.itemName.text = "${review.name}"
-            binding.itemDescription.text=review.description
+            binding.itemDescription.text = review.description
         }
     }
 
@@ -47,7 +50,10 @@ class MainAdapter(mainActivity: MainActivity) : ListAdapter<ListStoryItem, MainA
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: ListStoryItem, newItem: ListStoryItem): Boolean {
+            override fun areContentsTheSame(
+                oldItem: ListStoryItem,
+                newItem: ListStoryItem
+            ): Boolean {
                 return oldItem == newItem
             }
         }

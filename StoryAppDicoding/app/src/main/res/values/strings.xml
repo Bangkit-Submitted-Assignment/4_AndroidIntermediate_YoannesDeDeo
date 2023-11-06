@@ -13,4 +13,14 @@
     <string name="name_item">judul</string>
     <string name="desc_item">deskripsi item</string>
     <string name="logout">Logout</string>
+    <string name="regis_page">Registration</string>
+    <string name="login_page">Login</string>\
+    <string name="beranda">Beranda</string>
+    <string name="kosong">tidak ada data yang dimuat</string>
+    <string name="detail">detail user</string>
+    <string name="camera_x">CameraX</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galeri</string>
+    <string name="upload">Unggah</string>
+    <string name="empty_image_warning">Silakan masukkan berkas gambar terlebih dahulu.</string>
 </resources>
