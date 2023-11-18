@@ -1,8 +1,15 @@
 package com.dicoding.storyappdicoding.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.liveData
+import com.dicoding.storyappdicoding.StoryPagingSource
 import com.dicoding.storyappdicoding.api.ApiService
+import com.dicoding.storyappdicoding.api.ListStoryItem
 import com.dicoding.storyappdicoding.api.LoginResponse
 import com.dicoding.storyappdicoding.api.RegisterResponse
 import com.dicoding.storyappdicoding.data_class.DataUser
@@ -32,6 +39,15 @@ class UserRepository private constructor(
             Log.d("User repository", "Permintaan memuat data gagal", e)
         }
     }
+    suspend fun getStoryPaging(token: String): LiveData<PagingData<ListStoryItem>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            pagingSourceFactory = {
+                StoryPagingSource(apiService, token)
+            }
+        ).liveData
 
     suspend fun getDetailUser(token: String, id: String) = liveData {
         try {
@@ -40,6 +56,16 @@ class UserRepository private constructor(
         } catch (e: Exception) {
             Log.d("User repository", "Permintaan memuat data gagal", e)
             Log.d("User repository", "$token dan $id masih eror")
+        }
+    }
+
+    suspend fun getLocation(author:String) = liveData {
+        try {
+            val response= apiService.getStoriesWithLocation("Bearer $author")
+            emit(Helper.Success(response))
+        }catch (e:Exception){
+            Log.d("User repository", "Permintaan memuat data gagal", e)
+            Log.d("map","$author")
         }
     }
 

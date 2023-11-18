@@ -1,8 +1,10 @@
 package com.dicoding.storyappdicoding.adapter
 
+import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.app.ActivityOptionsCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -29,11 +31,11 @@ class MainAdapter(mainActivity: MainActivity) :
             val sendData= Intent(holder.itemView.context,DetailActivity::class.java)
             sendData.putExtra(DetailActivity.USER,user.id)
             sendData.putExtra(DetailActivity.NAME,user.name)
-            holder.itemView.context.startActivity(sendData)
+            holder.itemView.context.startActivity(sendData, ActivityOptionsCompat.makeSceneTransitionAnimation(holder.itemView.context as Activity).toBundle())
         }
     }
 
-    class MyViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(val binding: ListItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(review: ListStoryItem) {
             val img = review.photoUrl
             Glide.with(binding.root.context)
@@ -41,6 +43,7 @@ class MainAdapter(mainActivity: MainActivity) :
                 .into(binding.itemPhoto)
             binding.itemName.text = "${review.name}"
             binding.itemDescription.text = review.description
+            binding.itemTgl.text=review.createdAt
         }
     }
 

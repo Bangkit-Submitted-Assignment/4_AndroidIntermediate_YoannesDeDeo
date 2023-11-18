@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var itemBinding: ListItemBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -119,6 +120,11 @@ class MainActivity : AppCompatActivity() {
                 mainViewModel.logout()
                 val goLogout = Intent(this@MainActivity, WelcomeAppActivity::class.java)
                 startActivity(goLogout)
+                return true
+            }
+            R.id.buttonMaps ->{
+                val goMaps = Intent(this@MainActivity, MapsActivity::class.java)
+                startActivity(goMaps)
                 return true
             }
 

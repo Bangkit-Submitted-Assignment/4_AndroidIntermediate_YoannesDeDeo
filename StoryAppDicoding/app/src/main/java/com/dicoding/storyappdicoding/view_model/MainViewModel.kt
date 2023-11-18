@@ -6,7 +6,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.dicoding.storyappdicoding.api.DetailResponse
+import com.dicoding.storyappdicoding.api.ListStoryItem
 import com.dicoding.storyappdicoding.api.StoryResponse
 import com.dicoding.storyappdicoding.data_class.DataUser
 import com.dicoding.storyappdicoding.di.Helper
@@ -31,6 +34,11 @@ class MainViewModel(private val repository: UserRepository) : ViewModel() {
                 storyLiveData.value = it
             }
         }
+    }
+
+    suspend fun getStoryPaging(token: String){
+        val storyPaging: LiveData<PagingData<ListStoryItem>> =
+            repository.getStoryPaging(token).cachedIn(viewModelScope)
     }
 
     fun getDetail(token: String, id: String) {

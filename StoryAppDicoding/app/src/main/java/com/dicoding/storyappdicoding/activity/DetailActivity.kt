@@ -18,10 +18,6 @@ class DetailActivity : AppCompatActivity() {
     private lateinit var viewModel: MainViewModel
     var token: String? = null
 
-    companion object {
-        const val USER = "user"
-        const val NAME="name"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,5 +68,10 @@ class DetailActivity : AppCompatActivity() {
             }
             .create()
         dialog.show()
+    }
+
+    companion object {
+        const val USER = "user"
+        const val NAME="name"
     }
 }

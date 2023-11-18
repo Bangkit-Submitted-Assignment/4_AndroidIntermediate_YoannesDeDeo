@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin") version "2.0.1"
+
 }
 
 android {
@@ -40,6 +42,9 @@ android {
 }
 
 dependencies {
+    implementation("com.google.android.gms:play-services-maps:17.0.1")
+
+
     val cameraxVersion = "1.2.3"
 
     implementation("androidx.core:core-ktx:1.12.0")
@@ -65,8 +70,10 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.8.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
 
+
     implementation("androidx.camera:camera-camera2:$cameraxVersion")
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")
 
+    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
 }

@@ -7,6 +7,7 @@ import com.dicoding.storyappdicoding.di.Injection
 import com.dicoding.storyappdicoding.repository.UserRepository
 import com.dicoding.storyappdicoding.view_model.LoginViewModel
 import com.dicoding.storyappdicoding.view_model.MainViewModel
+import com.dicoding.storyappdicoding.view_model.MapViewModel
 import com.dicoding.storyappdicoding.view_model.RegisterViewModel
 
 class ViewModelFactory(private val repository: UserRepository) :
@@ -24,6 +25,10 @@ class ViewModelFactory(private val repository: UserRepository) :
 
             modelClass.isAssignableFrom(RegisterViewModel::class.java) -> {
                 RegisterViewModel(repository) as T
+            }
+
+            modelClass.isAssignableFrom(MapViewModel::class.java)->{
+                MapViewModel(repository) as T
             }
 
             else -> throw IllegalArgumentException("Unknown ViewModel class: " + modelClass.name)
