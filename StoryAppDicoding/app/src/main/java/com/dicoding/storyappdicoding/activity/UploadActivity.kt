@@ -11,11 +11,9 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.dicoding.storyappdicoding.R
-import com.dicoding.storyappdicoding.activity.CameraActivity.Companion.CAMERAX_RESULT
 import com.dicoding.storyappdicoding.api.AddNewsStoryResponse
 import com.dicoding.storyappdicoding.api.ApiConfig
 import com.dicoding.storyappdicoding.databinding.ActivityUploadBinding
@@ -97,17 +95,6 @@ class UploadActivity : AppCompatActivity() {
         ActivityResultContracts.TakePicture()
     ) { isSuccess ->
         if (isSuccess) {
-            showImage()
-        }
-    }
-
-
-
-    private val launcherIntentCameraX = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) {
-        if (it.resultCode == CAMERAX_RESULT) {
-            currentImageUri = it.data?.getStringExtra(CameraActivity.EXTRA_CAMERAX_IMAGE)?.toUri()
             showImage()
         }
     }

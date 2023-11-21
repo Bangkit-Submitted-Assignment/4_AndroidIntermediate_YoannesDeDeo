@@ -67,15 +67,15 @@
         android:alpha="1"
         tools:alpha="100"
         android:hint="@string/desc_item"
-    >
+        >
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/ed_desc"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:ems="10"
-        android:inputType="text"
-        />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ed_desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="10"
+            android:inputType="textMultiLine"
+            android:gravity="top" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

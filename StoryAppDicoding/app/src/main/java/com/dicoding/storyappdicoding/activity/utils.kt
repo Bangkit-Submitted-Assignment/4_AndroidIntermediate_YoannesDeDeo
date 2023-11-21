@@ -49,6 +49,7 @@ private fun getImageUriForPreQ(context: Context): Uri {
         "${BuildConfig.APPLICATION_ID}.fileprovider",
         imageFile
     )
+
 }
 
 fun createCustomTempFile(context: Context): File {

@@ -75,5 +75,17 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:$cameraxVersion")
     implementation("androidx.camera:camera-view:$cameraxVersion")
 
-    implementation("androidx.paging:paging-runtime-ktx:3.2.1")
+    implementation("androidx.paging:paging-runtime-ktx:3.1.1")
+
+    androidTestImplementation ("androidx.arch.core:core-testing:2.2.0") //InstantTaskExecutorRule
+    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4") //TestDispatcher
+    testImplementation ("androidx.arch.core:core-testing:2.2.0") // InstantTaskExecutorRule
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4") //TestDispatcher
+
+    androidTestImplementation ("androidx.test:core:1.5.0")
+    androidTestImplementation ("androidx.test:runner:1.5.2")
+    androidTestImplementation ("androidx.test:rules:1.5.0")
+
+    testImplementation ("org.mockito:mockito-core:4.4.0")
+    testImplementation ("org.mockito:mockito-inline:4.4.0")
 }

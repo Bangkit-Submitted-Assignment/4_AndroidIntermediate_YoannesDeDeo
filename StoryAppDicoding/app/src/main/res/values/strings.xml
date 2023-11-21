@@ -16,7 +16,7 @@
     <string name="regis_page">Registration</string>
     <string name="login_page">Login</string>\
     <string name="beranda">Beranda</string>
-    <string name="kosong">tidak ada data yang dimuat</string>
+    <string name="kosong">gagal memuat data, aktifkan internet</string>
     <string name="detail">detail user</string>
     <string name="camera_x">CameraX</string>
     <string name="camera">Kamera</string>
@@ -29,4 +29,7 @@
     <string name="satellite_type">Satellite</string>
     <string name="terrain_type">Terrain</string>
     <string name="hybrid_type">Hybrid</string>
+    <string name="retry">Coba lagi</string>
+    <string name="gagal">ada kesalahan</string>
+    <string name="author">Yoannes De Deo Haryo Wibisono</string>
 </resources>

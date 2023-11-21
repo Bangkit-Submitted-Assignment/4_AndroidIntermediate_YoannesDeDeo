@@ -2,6 +2,7 @@ package com.dicoding.storyappdicoding.repository
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
@@ -31,23 +32,21 @@ class UserRepository private constructor(
         return userPreference.getSession()
     }
 
-    suspend fun getStory(token: String) = liveData {
-        try {
-            val response = apiService.getStories("Bearer $token")
-            emit(Helper.Success(response))
+    fun getStoryPaging(token: String): LiveData<PagingData<ListStoryItem>> {
+        return try {
+            Pager(
+                config = PagingConfig(
+                    pageSize = 5
+                ),
+                pagingSourceFactory = {
+                    StoryPagingSource(apiService,"Bearer $token")
+                }
+            ).liveData
         } catch (e: Exception) {
-            Log.d("User repository", "Permintaan memuat data gagal", e)
+            Log.e("user repo", "$e")
+            MutableLiveData()
         }
     }
-    suspend fun getStoryPaging(token: String): LiveData<PagingData<ListStoryItem>> =
-        Pager(
-            config = PagingConfig(
-                pageSize = 5
-            ),
-            pagingSourceFactory = {
-                StoryPagingSource(apiService, token)
-            }
-        ).liveData
 
     suspend fun getDetailUser(token: String, id: String) = liveData {
         try {

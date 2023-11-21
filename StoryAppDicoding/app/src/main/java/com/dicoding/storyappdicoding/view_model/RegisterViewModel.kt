@@ -29,7 +29,7 @@ class RegisterViewModel(private val repository: UserRepository) : ViewModel() {
 
             val jsonInString = e.response()?.errorBody()?.string()
             val errorBody = Gson().fromJson(jsonInString, ErrorResponse::class.java)
-            val errorMessage = errorBody.message
+            errorBody.message
         }
     }
 

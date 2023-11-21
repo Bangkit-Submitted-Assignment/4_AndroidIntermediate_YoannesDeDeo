@@ -1,31 +1,33 @@
 package com.dicoding.storyappdicoding.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.storyappdicoding.R
+import com.dicoding.storyappdicoding.adapter.LoadingStateAdapter
 import com.dicoding.storyappdicoding.adapter.MainAdapter
-import com.dicoding.storyappdicoding.api.ListStoryItem
 import com.dicoding.storyappdicoding.databinding.ActivityMainBinding
-import com.dicoding.storyappdicoding.databinding.ListItemBinding
-import com.dicoding.storyappdicoding.di.Helper
 import com.dicoding.storyappdicoding.di.Injection
 import com.dicoding.storyappdicoding.view_model.MainViewModel
 import com.dicoding.storyappdicoding.view_model_factory.ViewModelFactory
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mainViewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
-    private lateinit var itemBinding: ListItemBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +42,39 @@ class MainActivity : AppCompatActivity() {
         ).get(MainViewModel::class.java)
 
         cekSession()
+        showData()
 
+        binding.uploadButton.setOnClickListener {
+            val intent = Intent(this@MainActivity, UploadActivity::class.java)
+            startActivity(intent)
+        }
+
+    }
+
+    private fun showData(){
+        if (isNetworkAvailable()){
+            showLoading(true)
+            showingListStory()
+        }else{
+            showLoading(true)
+            AlertDialog.Builder(this).apply {
+                setTitle("No Internet Connection")
+                setMessage("enable internet connectivity to continue.")
+                setPositiveButton("Enable Internet") { _, _ ->
+                    startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+                }
+                setNegativeButton("Cancel") { _, _ ->
+                    showToast("Please enable internet to use the app.")
+                }
+                create()
+                show()
+            }
+            showToast(getString(R.string.kosong))
+        }
+        showLoading(false)
+    }
+
+    private fun showingListStory() {
         val layoutManager = LinearLayoutManager(this)
         binding.listRecycleMain.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
@@ -49,47 +83,31 @@ class MainActivity : AppCompatActivity() {
         val tokenFlow = mainViewModel.getSession()
         tokenFlow.observe(this) { user ->
             val token = user.token
-            mainViewModel.getStory(token)
-            mainViewModel.getStoryLiveData.observe(this) { stories ->
+            val adapter = MainAdapter()
+            binding.listRecycleMain.adapter = adapter.withLoadStateFooter(
+                footer = LoadingStateAdapter {
+                    adapter.retry()
+                }
+            )
+            mainViewModel.getStoryPaging(token).observe(this) { stories ->
                 if (stories != null) {
-                    when (stories) {
-                        is Helper.Success -> setStory(stories.data.listStory)
-                        is Helper.Error -> showError("Failed to load data: ${stories.eror.message}")
-                    }
-
-                }else{
-                    itemBinding.itemDescription.text=getString(R.string.kosong)
-                    itemBinding.itemName.text=getString(R.string.kosong)
+                    adapter.submitData(lifecycle, stories)
+                } else {
+                    showToast(getString(R.string.kosong))
                 }
             }
         }
-
-        binding.uploadButton.setOnClickListener{
-            val intent= Intent(this@MainActivity,UploadActivity::class.java)
-            startActivity(intent)
-        }
-
     }
 
-    private fun setStory(data: List<ListStoryItem>) {
-        val adapter = MainAdapter(this)
-        adapter.submitList(data)
-        binding.listRecycleMain.adapter = adapter
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showError(message: String) {
-        val dialog = AlertDialog.Builder(this)
-            .setTitle("Error")
-            .setMessage("Failed to load data: $message")
-            .setPositiveButton("Retry") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
-
-        dialog.show()
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
     }
 
     private fun cekSession() {
@@ -122,7 +140,8 @@ class MainActivity : AppCompatActivity() {
                 startActivity(goLogout)
                 return true
             }
-            R.id.buttonMaps ->{
+
+            R.id.buttonMaps -> {
                 val goMaps = Intent(this@MainActivity, MapsActivity::class.java)
                 startActivity(goMaps)
                 return true
@@ -130,6 +149,10 @@ class MainActivity : AppCompatActivity() {
 
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     @SuppressLint("MissingSuperCall")
